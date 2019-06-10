@@ -4,6 +4,8 @@ source setenv
 
 ./00-show-vars.sh
 
+export KUBECONFIG=./kubeconfig/config-$CLUSTER_NAME
+
 velero install \
     --provider azure \
     --bucket velero-prd \

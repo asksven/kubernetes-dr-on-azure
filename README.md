@@ -33,4 +33,4 @@ The input data for the scripts are located in `setenv`:
 1. Edit `setenv`
 2. Run `execute-dr.sh`: this will create the cluster but not switch the prod DNS
 3. Run `13-dns-to-dr.sh` to switch production to the DR cluster
-4. Run `99-dns-back-to-homs.sh` to switch back the the production cluster
+4. Run `99-dns-back-to-prod.sh` to switch back the the production cluster
