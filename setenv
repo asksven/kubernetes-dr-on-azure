@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# the name of the cluster
+export REQUESTED_NAME='<name of your dr cluster, e.g. homelab-dr>'
+
+export SUBSCRIPTION='<your-azure-subscription-id>'
+export LOCATION='<region-to-provision-your-cluster>'
+
+# aks node VM size and count
+export VM_SIZE="Standard_B2s"
+export AGENT_COUNT=2
+
+# valid versions can be obtained using:
+# az aks get-versions --subscription $SUBSCRIPTION --location $LOCATION
+export K8S_VERSION="1.13.5"
+
+# acme info for let's encypt
+export ACME_CONTACT="<your-e-mail>"
+export PARENT_DOMAIN="<the-a-record-of-your-production-domain>"
+export MAIN_DC_IP="<the-ip-of-your-prod-cluster>"
+
+# DNS zone coordinated
+export AZ_DNS_RG="<the-rm-name-your-dns-zone-is-located-in>"
+
+# Velero coordinates
+export AZURE_BACKUP_RESOURCE_GROUP="<rg-the-backup-storage-account-is-in>"
+export AZURE_STORAGE_ACCOUNT_ID="<id-of-the-velero-storage-account>"
+
+##############################################
+# Do not change any value below here
+
+export RG="rg-k8s-${REQUESTED_NAME}"
+export CLUSTER_NAME="cluster-aks-$REQUESTED_NAME"
+
+export KEY_VAULT_NAME="${REQUESTED_NAME}-secrets"
+
+# Azure Container Registry name does not allow special chars
+export ACR_NAME=`echo ${REQUESTED_NAME}-registry | sed 's/[\._-]//g'`
+
+export DOMAIN="${REQUESTED_NAME}.${PARENT_DOMAIN}"

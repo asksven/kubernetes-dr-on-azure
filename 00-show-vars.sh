@@ -1,0 +1,14 @@
+echo "REQUESTED NAME: $REQUESTED_NAME"
+echo "SUBSCRIPTION: $SUBSCRIPTION"
+echo "LOCATION: $LOCATION"
+echo "RESOURCE GROUP: $RG"
+echo "CLUSTER NAME: $CLUSTER_NAME"
+echo "AGENTS: $AGENT_COUNT"
+echo "KEYVAULT: $KEY_VAULT_NAME"
+echo "VM SIZE:" $VM_SIZE
+
+if [ -z "$REQUESTED_NAME" ]
+then
+      echo "\$REQUESTED_NAME is empty"
+      exit 1
+fi
