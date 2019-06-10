@@ -1,4 +1,4 @@
-# Create an AKS devtest cluster
+# Create an AKS DR cluster
 
 ## Overview
 This is a collection of runbooks that create a DR kubernetes cluster on-the-fly:
@@ -13,30 +13,24 @@ This is a collection of runbooks that create a DR kubernetes cluster on-the-fly:
 
 ## Input data
 
-The input data for the scripts are located in `params`:
-- `REQUESTED_NAME`: the name of the requested cluster 
+The input data for the scripts are located in `setenv`:
+- `REQUESTED_NAME`: the name of the requested cluster
+- `SUBSCRIPTION': the Azure subscription-id where the cluster should be created
+- `LOCATION`: the azure location/region to provision resources
+- `VM_SIZE`: the cluster node vm size
+- `AGENT_COUNT`: the number of nodes
+- `K8S_VERSION`: the k8s version to be provisioned
+- `ACME_CONTACT`: your e-mail contact address for let's encrypt
+- `PARENT_DOMAIN`: the name of the parent domain (managed by the DNS zone)
+- `MAIN_DC_IP`: the IP of the production cluster
+- `AZ_DNS_RG`: the name of the resource group the DNS zone is in
+- `AZURE_BACKUP_RESOURCE_GROUP`: the resource group velero backs-up into
+- `AZURE_STORAGE_ACCOUNT_ID`: the ID of the velero storage account
 
-## Configuration
-
-The configuration of the automation as well as the dynamic creation of resource names is located in `setenv`
 
 ## Execution
 
-1. Edit `params` and enter the name of the cluster
-2. Run the scripts `01..11` in sequence
-
-## Advanced topics
-
-## Storage of secrets, passwords and keys
-
-All secrets, password and keys created by the automation are stored in the Azure Keyvault created in `02`.
-
-## Add IP restrictions at the NSG
-
-We want to limit the imbound traffic to IPs from the own network. For that we have to go through all inbound rules having `internet` as source, change their source to `IP Addresses` and set the range to `195.234.12.0/24,195.234.13.0/24,212.90.104.0/22,91.151.24.0/21`.
-
-## Retrieve gitlab root password
-
-```
-kubectl -n gitlab get secret gitlab-gitlab-initial-root-password -o json | jq '.data.password' -r | base64 --decode
-```
+1. Edit `setenv`
+2. Run `execute-dr.sh`: this will create the cluster but not switch the prod DNS
+3. Run `13-dns-to-dr.sh` to switch production to the DR cluster
+4. Run `99-dns-back-to-homs.sh` to switch back the the production cluster
